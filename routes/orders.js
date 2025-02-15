@@ -12,7 +12,7 @@ const {
 const orderRouter = Router();
 
 // Get order statistics
-orderRouter.get('/stats', getOrderStats);
+orderRouter.get('/stats',  getOrderStats); 
 
 // New order
 orderRouter.post('/', createOrder);

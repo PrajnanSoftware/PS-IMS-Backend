@@ -9,5 +9,6 @@ const router = express.Router();
 router.post('/register', checkSchema(userRegisterSchema), userCtrl.register);
 router.post('/login', checkSchema(userLoginSchema),  userCtrl.login);
 router.get('/account', authenticateUser, userCtrl.account);
+router.put('/updateUser/:id',authenticateUser,userCtrl.updateUser);
 
 module.exports = router;

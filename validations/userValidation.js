@@ -1,6 +1,11 @@
 const User = require('../models/User');
 
 const userRegisterSchema = {
+    name: { 
+        notEmpty: { errorMessage: 'Name is required' }, 
+        isString: { errorMessage: 'Name must be a string' }, 
+        trim: true 
+    },
     email: {
         notEmpty: { errorMessage: 'Email is required' },
         isEmail: { errorMessage: 'Email should be in a valid format' },
@@ -24,6 +29,16 @@ const userRegisterSchema = {
             errorMessage: 'Password must be between 8-128 characters long'
         },
         trim: true
+    },
+    city: { 
+        optional: true, 
+        isString: { errorMessage: 'City must be a string' }, 
+        trim: true 
+    }, 
+    phone: { 
+        optional: true, 
+        isNumeric: { errorMessage: 'Phone number must be numeric' }, 
+        trim: true 
     },
     
 };

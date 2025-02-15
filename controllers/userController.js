@@ -14,7 +14,7 @@ const handleErrors = (res, err, message = 'Internal Server Error', statusCode = 
   // User Registration with Password Confirmation Check
   userCtrl.register = async (req, res) => {
     try {
-      const { email, password, confirmPassword } = req.body;
+      const { name, email, password, confirmPassword, city, phone} = req.body;
   
       // Check if password and confirmPassword match
       if (password !== confirmPassword) {
@@ -33,8 +33,11 @@ const handleErrors = (res, err, message = 'Internal Server Error', statusCode = 
   
       // Create a new user
       const newUser = new User({
+        name,
         email,
         password: hashedPassword, // Store hashed password
+        city,
+        phone
       });
   
       // Save the user to the database
@@ -72,10 +75,63 @@ userCtrl.account = async (req, res) => {
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
-        res.json(user);
+
+        res.status(200).json({                                                 //modified for profile 
+            id: user._id,                                                      //Date: 14/02/2025
+            name: user.name || '',
+            email: user.email,
+            phone: user.phone || '',
+            city: user.city || ''
+        });
     } catch (err) {
         handleErrors(res, err, 'Error fetching account details');
     }
+};
+
+
+// Update User Details                                     
+//Implemented update user in the profile and connect this function to EDIT button in the profile
+userCtrl.updateUser = async (req, res) => {
+  try {
+      if (!req.user) {
+          return res.status(401).json({ error: "Unauthorized access" });
+      }
+
+      const userId = req.user.id;
+      const updates = req.body;
+
+      // Check if only email is being updated
+      if (Object.keys(updates).length === 1 && updates.email) {
+          const existingUser = await User.findOne({ email: updates.email });
+
+          // If the email is taken by another user, prevent update
+          if (existingUser && existingUser._id.toString() !== userId) {
+              return res.status(400).json({ error: "Email is already registered" });
+          }
+      }
+
+      // If password is updated, hash it
+      if (updates.password) {
+          const salt = await bcryptjs.genSalt(12);
+          updates.password = await bcryptjs.hash(updates.password, salt);
+      }
+
+      const updatedUser = await User.findByIdAndUpdate(userId, updates, { 
+          new: true, 
+          runValidators: true 
+      }).select('-password'); // Exclude password from response
+
+      if (!updatedUser) {
+          return res.status(404).json({ error: "User not found" });
+      }
+
+      res.json(updatedUser);
+  } catch (err) {
+      if (err.code === 11000) {
+          return res.status(400).json({ error: "Email is already registered" });
+      }
+      handleErrors(res, err, "Error updating user");
+  }
 };
 
 module.exports = userCtrl;
