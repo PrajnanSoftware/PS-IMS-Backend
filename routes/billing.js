@@ -7,7 +7,6 @@ const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEYID, // Ensure this is set in your .env file
   key_secret: process.env.RAZORPAY_KEY_SECRET, // Ensure this is set in your .env file
 });
-
 // Create a Razorpay order
 router.post('/payment', async (req, res) => {
   let { amount } = req.body;

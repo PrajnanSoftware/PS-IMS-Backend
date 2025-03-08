@@ -33,7 +33,6 @@ app.use(bodyParser.json());
 
 // Connect to MongoDB
 connectDB();
-
 // Routes
 app.use('/api/search', searchRoutes);
 app.use('/api/orders', orderRouter);

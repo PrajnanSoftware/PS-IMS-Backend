@@ -11,7 +11,6 @@ exports.getAllSales = async (req, res) => {
     }
 };
 
-// Get sales statistics
 exports.getSalesStats = async (req, res) => {
     try {
         const totalSales = await Billing.countDocuments({ status: 'Reached' });

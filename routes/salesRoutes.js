@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const Billing = require("../models/billingModel"); // Ensure this path is correct
-
 router.get("/", async (req, res) => {
     try {
         const sales = await Billing.find(); // Fetch all billings data
