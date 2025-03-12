@@ -94,8 +94,19 @@ exports.generateInvoice = async (req, res) => {
                 pdfFile: pdfData, // store PDF as binary
             });
 
+<<<<<<< HEAD
             await newInvoice.save();
 
+=======
+            try {
+                await newInvoice.save();
+                console.log("Invoice successfully saved!");
+            } catch (error) {
+                console.error("Error saving invoice:", error);
+                return res.status(500).json({ error: "Database save failed", details: error.message });
+            }
+            
+>>>>>>> c940ee0e (final updated code)
             // Finally, send the PDF to the client
             // or open in new tab. Here we’ll just send it inline.
             res.setHeader('Content-Type', 'application/pdf');
@@ -106,11 +117,15 @@ exports.generateInvoice = async (req, res) => {
             return res.send(pdfData);
         });
 
+<<<<<<< HEAD
         // ==============================
         // Generate PDF content below
         // ==============================
 
         // --- (1) Register custom font if you have it ---
+=======
+         
+>>>>>>> c940ee0e (final updated code)
         const fontPath = path.join(__dirname, '..', 'assets', 'font.ttf');
         let fontAvailable = fs.existsSync(fontPath);
 
@@ -190,7 +205,11 @@ exports.generateInvoice = async (req, res) => {
         // (9) Item table headers
         let startX = 50;
         let startY = customerDetailsY + 80;
+<<<<<<< HEAD
         const colWidths = [30, 140, 60, 30, 60, 60, 50, 60, 60];
+=======
+        const colWidths = [25, 120, 50, 30, 60, 50, 45, 50, 70];
+>>>>>>> c940ee0e (final updated code)
         const rowHeight = 30;
         const tableWidth = colWidths.reduce((a, b) => a + b, 0);
 
@@ -314,6 +333,7 @@ exports.generateInvoice = async (req, res) => {
 };
 
 exports.getAllInvoices = async (req, res) => {
+<<<<<<< HEAD
   try {
     const invoices = await Invoice.find({});
     return res.json(invoices);
@@ -363,4 +383,55 @@ exports.downloadInvoicePdf = async (req, res) => {
     console.error('Error downloading invoice PDF:', error);
     return res.status(500).json({ error: 'Failed to download invoice PDF' });
   }
+=======
+    try {
+        const invoices = await Invoice.find({});
+        return res.json(invoices);
+    } catch (error) {
+        console.error('Error fetching invoices:', error);
+        return res.status(500).json({ error: 'Failed to fetch invoices' });
+    }
+};
+
+exports.getInvoiceById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        // Populate 'cart.product' if you want to load Inventory details
+        const invoice = await Invoice.findById(id).populate('cart.product');
+        if (!invoice) {
+            return res.status(404).json({ error: 'Invoice not found' });
+        }
+        return res.json(invoice);
+    } catch (error) {
+        console.error('Error fetching invoice by ID:', error);
+        return res.status(500).json({ error: 'Failed to fetch invoice' });
+    }
+};
+
+exports.downloadInvoicePdf = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const invoice = await Invoice.findById(id);
+        if (!invoice) {
+            return res.status(404).json({ error: 'Invoice not found' });
+        }
+        if (!invoice.pdfFile) {
+            return res.status(404).json({ error: 'Invoice PDF not found' });
+        }
+
+        // Optional: attach a filename
+        const filename = invoice.invoiceNumber
+            ? `${invoice.invoiceNumber}.pdf`
+            : 'invoice.pdf';
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+
+        // Send the PDF buffer
+        return res.send(invoice.pdfFile);
+    } catch (error) {
+        console.error('Error downloading invoice PDF:', error);
+        return res.status(500).json({ error: 'Failed to download invoice PDF' });
+    }
+>>>>>>> c940ee0e (final updated code)
 };
