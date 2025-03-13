@@ -33,6 +33,10 @@ app.use(bodyParser.json());
 // Connect to MongoDB
 connectDB();
 
+app.get('/', (req, res)=>{
+    res.send("connected")
+});
+
 // Routes
 app.use('/api/search', searchRoutes);
 app.use('/api/orders', orderRouter);
