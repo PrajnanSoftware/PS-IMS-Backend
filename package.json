@@ -24,6 +24,7 @@
     "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^6.9.16",
     "razorpay": "^2.9.5",
+    "xtend": "^4.0.2",
     "uuid": "^11.0.3"
   }
 }
