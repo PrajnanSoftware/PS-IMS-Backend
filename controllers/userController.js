@@ -33,11 +33,8 @@ const handleErrors = (res, err, message = 'Internal Server Error', statusCode = 
   
       // Create a new user
       const newUser = new User({
-        name,
         email,
         password: hashedPassword, // Store hashed password
-        city,
-        phone
       });
   
       // Save the user to the database
