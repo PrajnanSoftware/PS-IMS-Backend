@@ -26,8 +26,6 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 // Middleware
-const cors = require('cors');
-
 const allowedOrigins = [
   'http://localhost:5173', 
   'https://ims.prajnansoftwares.com'
