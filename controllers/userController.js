@@ -14,7 +14,7 @@ const handleErrors = (res, err, message = 'Internal Server Error', statusCode = 
   // User Registration with Password Confirmation Check
   userCtrl.register = async (req, res) => {
     try {
-      const { name, email, password, confirmPassword, city, phone} = req.body;
+      const {email, password, confirmPassword} = req.body;
   
       // Check if password and confirmPassword match
       if (password !== confirmPassword) {
