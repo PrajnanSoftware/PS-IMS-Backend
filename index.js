@@ -10,21 +10,18 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const connectDB = require('./config/db');
+
+// Import Routes
 const { orderRouter } = require('./routes/orders.js');
 const { supplierRoute } = require("./routes/supplierRoute.js");
 const userRoutes = require('./routes/userRoutes');
 const dashboardRoutes = require('./routes/dashboard');
-
-const { orderRouter } = require('./routes/orders.js');
-const { supplierRoute } = require("./routes/supplierRoute.js");
-const userRoutes = require('./routes/userRoutes');
-const dashboardRoutes = require('./routes/dashboard'); // see below
 const reportsRoutes = require('./routes/reports');
 const manageStoreRoute = require('./routes/manageStoreRoute');
 const inventoryRoutes = require('./routes/inventory');
 const searchRoutes = require('./routes/searchRoute');
-const billingRoutes = require('./routes/billing');    // Razorpay-related routes
-const invoiceRoutes = require('./routes/invoiceRoutes'); // Our new invoice routes
+const billingRoutes = require('./routes/billing');    
+const invoiceRoutes = require('./routes/invoiceRoutes'); 
 const salesRoutes = require('./routes/salesRoutes');
 const storeRoute = require('./routes/storeRoute');
 const stockRoute = require('./routes/stockRoute');
@@ -39,23 +36,16 @@ app.use(bodyParser.json());
 
 // Connect to MongoDB
 connectDB();
-// Routes
-// 1) CORS config
+
+// CORS Configuration
 app.use(cors({
     origin: 'http://localhost:5173',
-    methods: ['GET','POST','PUT','DELETE'],
-    allowedHeaders: ['Content-Type','Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
 
-// 2) JSON + Body Parser
-app.use(express.json());
-app.use(bodyParser.json());
-
-// 3) Connect to MongoDB
-connectDB();
-
-// 4) Routes
+// Routes
 app.use('/api/search', searchRoutes);
 app.use('/api/orders', orderRouter);
 app.use('/api/supplier', supplierRoute);
@@ -64,11 +54,12 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/manage-store', manageStoreRoute);
 app.use('/api/inventory', inventoryRoutes);
-app.use('/api/billing', billingRoutes);      // Razorpay-related routes
-app.use('/api/invoices', invoiceRoutes);     // Invoice generation + retrieval routes
+app.use('/api/billing', billingRoutes);
+app.use('/api/invoices', invoiceRoutes);
 app.use('/api/stores', storeRoute);
 app.use('/api/stock', stockRoute);
 
+// Start the Server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
